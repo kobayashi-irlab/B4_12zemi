@@ -1,0 +1,44 @@
+\chapter{ソフトウェア設計}
+\label{cha:software_design}
+\graphicspath{{figures/04_software_design}}
+
+
+\section{カルマンフィルタの実装}
+\label{sec:kalman_filter}
+
+カルマンフィルタの疑似コードは\ref{alg:kalman_filter}です．
+あああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ
+
+\begin{algorithm}
+  \caption{Kalman Filter}
+  \label{alg:kalman_filter}
+  \begin{algorithmic}[1]
+    \State \textbf{Input:} Initial State $\mathbf{\hat{x}}_{0|0}$, Initial Covariance $\mathbf{P}_{0|0}$
+    \State \textbf{Output:} Estimated State at time $k$, $\mathbf{\hat{x}}_{k|k}$
+    \State
+    \For{$k = 1, 2, \dots$}
+    %
+    \State \textbf{Prediction Step}
+    %
+    \State \quad $\mathbf{\hat{x}}_{k|k-1} \gets \mathbf{A} \mathbf{\hat{x}}_{k-1|k-1} + \mathbf{B} \mathbf{u}_k$
+    \Comment{Project the state ahead}
+    \State \quad $\mathbf{P}_{k|k-1} \gets \mathbf{A} \mathbf{P}_{k-1|k-1} \mathbf{A}^{\top} + \mathbf{Q}$
+    \Comment{Project the error covariance ahead}
+    \State 
+    %
+    \State \textbf{Update Step}
+    %
+    \State \quad $\mathbf{K}_k \gets \mathbf{P}_{k|k-1} \mathbf{C}^{\top} (\mathbf{C} \mathbf{P}_{k|k-1} \mathbf{C}^{\top} + \mathbf{R})^{-1}$
+    \Comment{Compute the Kalman gain}
+    \State \quad $\mathbf{\hat{x}}_{k|k} \gets \mathbf{\hat{x}}_{k|k-1} + \mathbf{K}_k (\mathbf{y}_k - \mathbf{C} \mathbf{\hat{x}}_{k|k-1})$
+    \Comment{Update the state estimate}
+    \State \quad $\mathbf{P}_{k|k} \gets (\mathbf{I} - \mathbf{K}_k \mathbf{C}) \mathbf{P}_{k|k-1}$
+    \Comment{Update the error covariance}
+    \EndFor
+  \end{algorithmic}
+\end{algorithm}
+
+\section{ソフトウェア評価}
+\label{sec:software_evaluation}
+ソフトウェアの評価をします．
+いいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいい

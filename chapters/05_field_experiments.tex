@@ -1,0 +1,50 @@
+\chapter{実環境におけるシステム評価}
+\label{cha:field_experiments}
+\graphicspath{{figures/05_field_experiments}}
+
+
+\section{実験目的}
+\label{sec:exp_purpose}
+
+\eqref{eq:normal_distribution}はガウス分布です．
+\begin{equation}
+  f(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)
+  \label{eq:normal_distribution}
+\end{equation}
+
+
+
+\section{実験環境}
+\label{sec:exp_environment}
+
+実験環境を説明します．
+
+
+\section{実験結果}
+\label{sec:exp_results}
+
+ロボットのオドメトリは\eqref{eq:odometry}で計算されます．
+次の位置姿勢 $(x_{k+1}, y_{k+1}, \theta_{k+1})$ は，現在の位置姿勢 $(x_k, y_k, \theta_k)$ と，微小時間 $\Delta t$ の間の並進速度 $v$ および角速度 $\omega$ を使って更新されます．
+
+\begin{equation}
+  \begin{cases}
+    x_{k+1} = x_k + v \Delta t \cos(\theta_k + \frac{\omega \Delta t}{2}) \\
+    y_{k+1} = y_k + v \Delta t \sin(\theta_k + \frac{\omega \Delta t}{2}) \\
+    \theta_{k+1} = \theta_k + \omega \Delta t
+  \end{cases}
+  \label{eq:odometry}
+\end{equation}
+
+\subsection{現在の位置姿勢}
+$(x_k, y_k, \theta_k)$ は現在の位置姿勢です．
+
+\subsection{次の位置姿勢}
+$(x_{k+1}, y_{k+1}, \theta_{k+1})$ 次の位置姿勢です．
+
+\subsection{更新}
+微小時間 $\Delta t$ の間の並進速度 $v$ および角速度 $\omega$ を使って更新されます．
+
+\section{考察}
+\label{sec:exp_discussion}
+
+考察します．

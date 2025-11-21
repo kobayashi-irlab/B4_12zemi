@@ -1,0 +1,56 @@
+% ==================================================
+% lab-ref.sty
+%
+% Description:
+%   参考文献のスタイルを調整
+%
+% Usage:
+%   \usepackage{lab-ref}
+% --------------------------------------------------
+% Version: 1.0
+% Date:    2025-10-20
+% Author:  Sena <sena@irlab-uu.jp>
+% ==================================================
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{lab-ref}[2025/10/21 Custom Bibliography Style]
+
+\makeatletter
+
+
+% ========== 参考文献のスタイルを調整 ==========
+\RequirePackage[
+  % エンジン
+  backend = biber,%
+  % charset = utf8,%
+  % スタイル
+  style = ieee,%
+  sorting = none,%
+  citestyle = numeric-comp,%
+  sortcites = false,%
+  abbreviate = true,%
+  date = year,%
+  % % 出力項目
+  doi = false,%
+  url = false,%
+  isbn = false,%
+  eprint = false,%
+  % 互換性とその他
+  natbib = false,%
+  maxnames = 2,%
+  minnames = 2,%
+  language = auto,%
+  hyperref = true,%
+  backref = true,%
+]{biblatex}
+
+
+  % ========== 見出しタイトルの変更 ==========
+\defbibheading{bibliography}{\chapter*{参考文献}}
+
+% ========== 項目間の行間を調整 ==========
+\setlength{\bibitemsep}{0.5\baselineskip}
+
+\makeatother
+
+\endinput

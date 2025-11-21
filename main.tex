@@ -1,0 +1,90 @@
+%===================================================================
+%   卒業論文・修士論文 TeX テンプレート
+% ===================================================================
+
+% ===== ドキュメントクラスの指定 ==============================
+\documentclass{ozakilab-thesis}
+
+% % === 追加パッケージ =================================
+% \usepackage{}
+
+
+% ===== メタデータ ====================================
+\academicyear{令和 0 年度}
+\title{日本語タイトル}
+\university{宇都宮大学大学院}
+\department{地域創生科学研究科}
+\major{工農総合科学専攻}
+\author{著者名}
+\degreetype{修士論文}
+\studentid{123456A}
+\supervisor{
+  尾崎 功一 教授\\
+  ミヤグスク レナート 准教授\\
+  田畑 研太 助教}
+\submissiondate{2025年10月16日}
+
+% ===== 参考文献データベースの指定 ============================
+\addbibresource{references.bib}
+
+
+% ===== 文書の開始 ====================================
+\begin{document}
+
+% ----- 表紙 ----
+\maketitle
+
+% ----- 目次 ----
+\frontmatter
+\pagestyle{headings}
+\setcounter{page}{1}
+
+\tableofcontents
+\clearpage
+
+\listoffigures
+\clearpage
+
+\listoftables
+\clearpage
+
+% ----- 本文 -----
+\mainmatter
+\pagestyle{headings}
+\setcounter{page}{1}
+
+\input{chapters/01_introduction}
+
+\input{chapters/02_related_work}
+
+\input{chapters/03_hardware_design}
+
+\input{chapters/04_software_design}
+
+\input{chapters/05_field_experiments}
+
+\input{chapters/06_simulation_experiments}
+
+\input{chapters/07_conclusion}
+\clearpage
+
+% ----- 謝辞 -----
+\pagestyle{plain}
+\input{acknowledgements}
+\clearpage
+
+% ----- 参考文献 -----
+\pagestyle{headings}
+% \printbibliography[heading=bibintoc, title={参考文献}]
+\printbibliography
+
+% ----- 付録 -----
+\appendix
+\pagestyle{headings}
+\input{appendices/a_schematics}
+
+\input{appendices/b_source_code}
+
+\input{appendices/c_additional_experiments}
+
+\end{document}

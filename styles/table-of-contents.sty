@@ -1,0 +1,59 @@
+% ==================================================
+% tabl-of-contents.sty
+%
+% Description: 
+%   目次のデザインを調整
+%
+% Usage:
+%   \usepackage{table-of-contents}
+% --------------------------------------------------
+% Version: 1.0
+% Date:    2025-10-20
+% Author:  Sena <s.saito@irlab-uu.jp>
+% ==================================================
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{table-of-contents}[2025/10/20 Custom TOC style]
+
+
+\makeatletter
+
+% ========== 表示する目次の深さを設定 ==========
+\setcounter{tocdepth}{3}
+
+% ========== 点線の間隔を調整 ==========
+\renewcommand{\@dotsep}{4}
+
+% ========== 章見出しを再定義 ==========
+\renewcommand*{\l@chapter}[2]{%
+  \ifnum \c@tocdepth >\m@ne
+    \addpenalty{-\@highpenalty}%
+    \addvspace{0.5\baselineskip \@plus \p@}%
+    \setlength{\@lnumwidth}{5\zw}
+    \parindent \z@
+    \rightskip \@pnumwidth
+    \parfillskip -\@pnumwidth
+    \leavevmode
+    {\bfseries #1 \nobreak \hfil \nobreak \hb@xt@ \@pnumwidth{\hss #2}\par}
+    \addpenalty{\@highpenalty}
+  \fi
+}
+
+% ========== 節見出しを再定義 ==========
+\renewcommand*{\l@section}[2]{%
+  \@dottedtocline{1}{1.5\zw}{2.5\zw}{#1}{#2}%
+}
+
+% ========== 項見出しを再定義 ==========
+\renewcommand*{\l@subsection}[2]{%
+  \@dottedtocline{2}{2\zw}{3.5\zw}{#1}{#2}%
+}
+
+% ========== 目見出しを再定義 ==========
+\renewcommand*{\l@subsubsection}[2]{%
+  \@dottedtocline{3}{2.5\zw}{4.5\zw}{#1}{#2}%
+}
+
+\makeatother
+
+\endinput

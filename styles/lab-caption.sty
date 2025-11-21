@@ -1,0 +1,64 @@
+% ==================================================
+% lab-caption.sty
+%
+% Description: 
+%   図表のキャプションを調整
+%
+% Usage:
+%   \usepackage{lab-caption}
+% --------------------------------------------------
+% Version: 1.0
+% Date:    2025-10-20
+% Author:  Sena <sena@irlab-uu.jp>
+% ==================================================
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{lab-caption}[2025/10/20 v1.0 ozakilab caption style]
+
+
+\makeatletter
+
+
+% ========== すべてのキャプションの共通設定 ==========
+\RequirePackage{caption}
+\RequirePackage{setspace}
+\captionsetup{%
+format = hang,%
+justification = justified,%
+singlelinecheck = true,%
+indention = 0pt,%
+font = {stretch=0.9, normalsize, rm},%
+% font = {stretch=1.2},%
+labelfont = {bf},%
+textfont = {},%
+labelsep = space,%
+aboveskip = 10pt,%
+belowskip = 20pt,%
+margin = 1cm,%
+}
+
+% ========== figureの設定 ==========
+\renewcommand{\figurename}{Fig.~}
+\captionsetup[figure]{
+  position = bottom,%
+}
+
+% ========== subfigureの設定 ==========
+\RequirePackage{subcaption}
+\captionsetup[subfigure]{
+  position = bottom,%
+  labelformat = parens,%
+  subrefformat = parens,%
+  list = true,%
+  listformat = parens,%
+  hypcap = true,%
+}
+% \renewcommand\thesubfigure{(\alph{subfigure})}
+
+% ========== tableの設定 ==========
+\captionsetup[table]{
+  position = top,%
+}
+\makeatother
+
+\endinput

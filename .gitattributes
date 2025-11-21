@@ -1,0 +1,15 @@
+# git
+.git/ export-ignore
+.gitignore export-ignore
+.gitattributes export-ignore
+LICENSE export-ignore
+README.md export-ignore
+
+# make
+MakeFile export-ignore
+
+# vscode
+.vscode/ export-ignore
+
+# tex build flag
+build_flag export-ignore

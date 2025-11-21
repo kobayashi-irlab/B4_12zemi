@@ -1,0 +1,65 @@
+% ==================================================
+% title-page.sty
+%
+% Description: 
+%   タイトルページのレイアウトを調整
+%
+% Usage:
+%   \usepackage{title-page}
+% --------------------------------------------------
+% Version: 1.0
+% Date:    2025-10-20
+% Author:  Sena <s.saito@irlab-uu.jp>
+% ==================================================
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{title-page}[2025/10/20 Custom Title Page Style]
+
+
+\makeatletter
+
+% ========== タイトルページで使う変数を定義 ========== 
+\def\degreetype#1{\gdef\@degreetype{#1}}
+\def\academicyear#1{\gdef\@academicyear{#1}}
+\def\university#1{\gdef\@university{#1}}
+\def\department#1{\gdef\@department{#1}}
+\def\major#1{\gdef\@major{#1}}
+\def\studentid#1{\gdef\@studentid{#1}}
+\def\supervisor#1{\gdef\@supervisor{#1}}
+\def\submissiondate#1{\gdef\@submissiondate{#1}}
+
+% ========== \maketitle を再定義 ==========
+\renewcommand{\maketitle}{%
+  \ifdefined\hypersetup
+    \hypersetup{pageanchor=false}%
+  \fi
+  \begin{titlepage}%
+    \begin{center}%
+      \vspace*{2cm}%
+      {\normalsize \@academicyear \quad \@degreetype\par}%
+      \vspace{2cm}%
+      {\bfseries \huge \@title\par}%
+    \end{center}%
+    \vfill%
+    \begin{flushright}%
+      \begin{minipage}{0.4\textwidth}%
+        {\normalsize \@submissiondate\par}%
+        \vspace{0.5cm}%
+        {\normalsize \@university\par}%
+        {\normalsize \@department\par}%
+        {\normalsize \@major\par}%
+        \vspace{0.5cm}%
+        {\normalsize 学籍番号：\@studentid\par}%
+        {\normalsize 氏名：\@author\par}%
+        \vspace{1cm}%
+        {\normalsize 指導教員\par\@supervisor\par}%
+      \end{minipage}%
+    \end{flushright}%
+  \end{titlepage}%
+  \ifdefined\hypersetup
+    % \clearpage
+    \hypersetup{pageanchor=true}%
+  \fi
+}
+
+\makeatother
