@@ -1,45 +1,184 @@
 {
-	"latex-workshop.latex.outDir": "%DIR%/build",
-  "latex-workshop.latex.autoBuild.onSave.enabled": true,
-	"latex-workshop.latex.autoBuild.recipe": "lualatexmk",
-	
-	"latex-workshop.latex.tools": [
-		{
-			"name": "lualatexmk",
-      "command": "latexmk",
-      "args": [
-				"-lualatex",
+    "editor.unicodeHighlight.invisibleCharacters": false,
+    // "python.defaultInterpreterPath": "/home/kouta/code/t_yolo11",
+    "latex-workshop.intellisense.package.enabled": true,
+    "latex-workshop.latex.autoClean.run": "onBuilt",
+    "latex-workshop.latex.clean.fileTypes": [
+        "*.aux",
+        "*.bbl",
+        "*.blg",
+        "*.idx",
+        "*.ind",
+        "*.lof",
+        "*.lot",
+        "*.out",
+        "*.toc",
+        "*.acn",
+        "*.acr",
+        "*.alg",
+        "*.glg",
+        "*.glo",
+        "*.gls",
+        "*.ist",
+        "*.fls",
+        "*.log",
+        "*.fdb_latexmk",
+        "*.snm",
+        "*.nav",
+        "*.dvi",
+        "*.synctex.gz"
+    ],
+    "latex-workshop.latex.outDir": "./",
+    "latex-workshop.view.pdf.viewer": "tab",
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "LuaLaTex",
+            "tools": [
+                "lualatexmk"
+            ]
+        }
+    ],
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk",
+            "/home/kobayashi/ronbun/B4_12zemicommand": "latexmk",
+            // "args": [
+            //     "-synctex=1",
+            //     "-interaction=nonstopmode",
+            //     "-file-line-error",
+            //     "-e",
+            //     "$latex=q/uplatex %O -halt-on-error -kanji=utf8 -no-guess-input-enc -synctex=1 -interaction=nonstopmode -file-line-error %S/",
+            //     "-e",
+            //     "$bibtex=q/upbibtex -kanji=utf-8 %O %B/",
+            //     "-e",
+            //     "$biber=q/biber --bblencoding=utf8 -u -U --output_safechars %O %S/",
+            //     "-e",
+            //     "$makeindex=q/upmendex %O -o %D %S/",
+            //     "-e",
+            //     "$dvipdf=q/dvipdfmx %O -o %D %S/",
+            //     "-norc",
+            //     "-gg",
+            //     "-pdfdvi",
+            //     "%DOC%"
+            // ],
+			"args": [
 				"-synctex=1",
-        "-interaction=nonstopmode",
-        "-file-line-error",
-				"-halt-on-error",
-				"--shell-escape",
-        "-outdir=%OUTDIR%",
-        "%DOC%"
-			]
-		},
-		{
-			"name": "latexmk_clean",
-      "command": "latexmk",
-      "args": [
-				"-C",
-        "-outdir=%OUTDIR%",
+				"-interaction=nonstopmode",
+				"-file-line-error",
 				"%DOC%"
-			]
-    }
-	],
-	"latex-workshop.latex.recipes": [
-		{
-			"name": "Make PDF",
-      "tools": [
-				"lualatexmk"
-			]
-		},
-		{
-      "name": "Clean Project",
-      "tools": [
-        "latexmk_clean"
-			]
-    }
-	],
+    		],
+            "env": {}
+        },
+        {
+            "name": "lualatexmk",
+            "command": "latexmk",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-lualatex",
+                "-outdir=%OUTDIR%",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "xelatexmk",
+            "command": "latexmk",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-xelatex",
+                "-outdir=%OUTDIR%",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "latexmk_rconly",
+            "command": "latexmk",
+            "args": [
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "bibtex",
+            "command": "bibtex",
+            "args": [
+                "%DOCFILE%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "rnw2tex",
+            "command": "Rscript",
+            "args": [
+                "-e",
+                "knitr::opts_knit$set(concordance = TRUE); knitr::knit('%DOCFILE_EXT%')"
+            ],
+            "env": {}
+        },
+        {
+            "name": "jnw2tex",
+            "command": "julia",
+            "args": [
+                "-e",
+                "using Weave; weave(\"%DOC_EXT%\", doctype=\"tex\")"
+            ],
+            "env": {}
+        },
+        {
+            "name": "jnw2texminted",
+            "command": "julia",
+            "args": [
+                "-e",
+                "using Weave; weave(\"%DOC_EXT%\", doctype=\"texminted\")"
+            ],
+            "env": {}
+        },
+        {
+            "name": "pnw2tex",
+            "command": "pweave",
+            "args": [
+                "-f",
+                "tex",
+                "%DOC_EXT%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "pnw2texminted",
+            "command": "pweave",
+            "args": [
+                "-f",
+                "texminted",
+                "%DOC_EXT%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "tectonic",
+            "command": "tectonic",
+            "args": [
+                "--synctex",
+                "--keep-logs",
+                "--print",
+                "%DOC%.tex"
+            ],
+            "env": {}
+        }
+    ]
 }

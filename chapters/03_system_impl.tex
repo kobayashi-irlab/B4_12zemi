@@ -1,0 +1,95 @@
+\chapter{なぞり動作とレーダセンサによる構造物内部の可視化}
+\label{cha:system_impl}
+\graphicspath{{figures/03_system_impl}}
+
+
+\section{エンドエフェクタの設計}
+\label{sec:hardware_overview}
+
+製作したエンドエフェクタの外観を\ref{fig:ee外観}に示す．エンドエフェクタには，赤外線近接距離センサモジュール(pololu, VL6180X)が同一平面上の91mm$\times$91mmの正方形の頂点に4つと，各辺の中心に4つの計8つ設置されている．この配置は，エンドエフェクタの姿勢の変化を安定して取得しつつ，後述するセンサ情報の計算を容易にするために設計されている．なお，これらの近接覚センサはその位置の重心がエンドエフェクタの中心と一致するよう取り付けられている．また，中央部にはレーダセンサを取り付けるための支柱と穴が設けられている．近接覚センサは$0\sim255$mmの範囲で1mmの分解能で距離を測定するが，各モジュールごとに得られる距離値に個体差があるため，使用する際はオフセットを設定してそれぞれの値を均一化する．
+
+\begin{figure}[tb]
+  \centering
+  \includegraphics[width=.8\linewidth]{ee外観.pdf}
+  \caption{Appearance of the end effector}
+  \label{fig:ee外観}
+\end{figure}
+
+\section{走査するレーダセンサの選定}
+\label{sec:mechanical_design}
+
+レーダセンサの解像度はレーダの波長に依存しているため，GPRでは5cm未満の物体が「点」として検出されたり，数cm間隔で並ぶ鉄筋が別個のオブジェクトとして認識されないなどといった問題があった\cite{gpr_point}\cite{gpr_unrecog}．一方で，波長が短く周波数が高いレーダセンサは物体中で減衰しやすく探査深度が浅くなってしまうことからインフラ等の検査にはあまり使用されない．しかし，本研究ではより高解像度に物体中の構造を可視化することを目指してミリ波レーダを用いる．中でも，活用の際の法律的なハードルが低いことから60GHz帯のレーダを使用する．ミリ波レーダは，acconeer社製のA121レーダセンサチップを搭載した評価キットXE121と，コネクタボードXC120を用いる．
+
+
+
+\section{なぞり動作のアルゴリズム}
+\label{sec:hardware_evaluation}
+
+なぞり動作は，エンドエフェクタを取り付けた7自由度協働ロボットアーム(UFactory, xArm7)によって行う．エンドエフェクタには\ref{fig:ee_coordinate}に示すように座標系が定義されており，これにしたがって近接覚センサの情報を計算して速度および角速度を与える．なお，速度と角速度は近接覚センサの誤差による振動を抑えるためにPD制御されている．
+
+以上の計算に用いるパラメータを，\ref{fig:計算に用いる文字}に示す．エンドエフェクタの面上にN個の近接覚センサが分布しており，その面の法線ベクトル$\boldsymbol{n}$の方向を計測しているとき，エンドエフェクタ座標系における各センサの位置を$\boldsymbol{p}_i$，各センサから得られる計測距離を$s_i$とすると$(i = 1,2,\ldots,N)$，センサの位置の重心$\boldsymbol{p}_C$およびセンサの計測距離の重心$\boldsymbol{p}_{SG}$は次式で表される．
+\begin{equation}
+\boldsymbol{p}_C = \frac{\sum_{i=1}^N \boldsymbol{p}_i}{N}, 
+\quad 
+\boldsymbol{p}_{SG} = \frac{\sum_{i=1}^N s_i \boldsymbol{p}_i}{\sum_{i=1}^N s_i}
+\end{equation}
+
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=.8 \linewidth]{ee_coordinate.pdf}
+    \caption{Endeffector coordinate system}
+    \label{fig:ee_coordinate}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{0.45\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{センサ計算説明図.pdf}
+    \caption{Distribution of sensor data}
+    \label{fig:センサ計算説明図}
+  \end{subfigure}
+  \hfill
+  % 右側の図
+  \begin{subfigure}{0.45\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{速度指令説明図.pdf}
+    \caption{Center of mass, velocity, and angular velocity}
+    \label{fig:速度指令説明図}
+  \end{subfigure}
+  \caption{Calculation symbols}
+  \label{fig:計算に用いる文字}
+\end{figure}
+
+\noindent
+センサ情報$s_i$に基づき，このセンサ位置の重心$\boldsymbol{p}_C$に対して物体表面のなぞり動作を行うための目標速度$\boldsymbol{v}$と目標角速度$\boldsymbol{\omega}$を与える．目標速度$\boldsymbol{v}$は次式となる．
+
+\begin{equation}
+\boldsymbol{v} = \boldsymbol{v}_{trace} + \boldsymbol{v}_{ctrl}
+\end{equation}
+
+\noindent
+ここで，$\boldsymbol{v}_{trace}$は物体に沿ってセンサ面に平行な方向にエンドエフェクタを動かすための速度の指令値である．また，$\boldsymbol{v}_{ctrl}$は物体表面とセンサ面の距離を一定に保つための速度であり，PD制御されている．これらは，近接覚センサが計測した距離の最小値${s}_{min}$と，センサ面と物体表面の目標距離${s}_{target}$の差$s_e$に基づいて次のように決定される．なお，$k_{vP}$と$k_{vD}$はそれぞれ比例ゲインと微分ゲインである．
+\begin{align}
+{s}_{min} &= \max_i {s}_i
+\\
+{s_e} &= {s}_{min} - {s}_{target}
+\\
+\boldsymbol{v}_{ctrl} &= k_{vP}s_e\boldsymbol{n} + k_{vD}(s_e - s_{e-1})\boldsymbol{n}
+\end{align}
+
+\noindent
+次に，物体表面とセンサ面を平行にするための回転速度である目標角速度$\boldsymbol{\omega}$は次式で表される．なお，$k_{\omega P}$と$k_{\omega D}$は各比例ゲインと微分ゲインである．
+\begin{align}
+\boldsymbol{p}_e &= \boldsymbol{p}_C - \boldsymbol{p}_{SG}
+\\
+\boldsymbol{\omega} &= k_{\omega P}\boldsymbol{n} \times \boldsymbol{p}_e + k_{\omega D}\boldsymbol{n} \times (\boldsymbol{p}_e - \boldsymbol{p}_{e-1})
+\end{align}
+
+\noindent
+$\boldsymbol{p}_C - \boldsymbol{p}_{SG}$は計測距離の重心$\boldsymbol{p}_{SG}$から位置の重心$\boldsymbol{p}_C$に向かうセンサ面内のベクトルであるから，位置の重心$\boldsymbol{p}_C$を中心としてエンドエフェクタに$\boldsymbol{n} \times (\boldsymbol{p}_C - \boldsymbol{p}_{SG})$方向の回転をさせると$\boldsymbol{p}_{SG}$が物体表面に近づくように動き，その結果$\boldsymbol{p}_{SG}$と$\boldsymbol{p}_C$が一致する動きをとることが期待される．これにより，なぞり動作が実現される．
+
+
+
+\section{可視化システム構成}
+\label{sec:hardware_evaluation}
